@@ -12,7 +12,9 @@
     "ethereumjs-util": "^4.0.1",
     "fake-merkle-patricia-tree": "^1.0.1",
     "functional-red-black-tree": "^1.0.1",
-    "merkle-patricia-tree": "^2.1.2"
+    "lodash": "^3.10.1",
+    "merkle-patricia-tree": "^2.1.2",
+    "web3": "^0.16.0"
   },
   "devDependencies": {
     "ethereumjs-blockchain": "^1.4.1",
