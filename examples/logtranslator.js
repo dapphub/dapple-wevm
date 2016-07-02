@@ -65,7 +65,6 @@ module.exports = class LogTranslator {
         }
       ];
     }));
-    console.log(that.events);
   }
 
   translate (_entry) {
