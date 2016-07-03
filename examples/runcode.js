@@ -14,8 +14,21 @@ var vm = new VM()
 // Generating sourceclass map: (sha3(bin) => name)
 // This is needed to infer class names of deployed contracts
 var sourceclassMap = {};
+
+// mapss class => function signature => constant bool
+// TODO - maybe substitute class names with sha(bin)
+//      ? can I find the info on an address origins code?
+var classfunctionconstantsMap = {};
+
 _.each(classes, (json, name) => {
   sourceclassMap[sha3(json.bin)] = name;
+  classfunctionconstantsMap[name] = {};
+  JSON.parse(json.abi)
+  .filter(json => json.type !== 'constructor')
+  .forEach(abi => {
+    var fname = utils.transformToFullName(abi);
+    classfunctionconstantsMap[name][sha3(fname).slice(0,8)] = abi.constant;
+  });
 });
 
 
@@ -44,7 +57,11 @@ vm.runCode({
   web3: web3,
   constantsMap: constantsMap,
   sourceclassMap: sourceclassMap,
-  addressclassMap: addressclassMap 
+  addressclassMap: addressclassMap,
+  ds: {
+    classfunctionconstantsMap,
+    logtranslator
+  }
 }, function (err, receipt) {
 
   var logs = [];
