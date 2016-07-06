@@ -12,7 +12,7 @@ const hexTranslators = {
   'logs': (hex) => web3.toAscii(hex).replace(/\u0000/g, ''),
   'string': (hex) => hex,
   'int': (hex) => web3.toBigNumber(hex).toString(),
-  'uint': (hex) => hex.toString(16),//web3.toBigNumber(hex).toString(),
+  'uint': (hex) => web3.toBigNumber(hex).toString(),
   'address': (hex) => hex,
   'bytes[]': (hex) => hex.map(b => b.slice(2)).join(''),
   'uint[]': (hex) => hex.join(', ')
