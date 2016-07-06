@@ -89,9 +89,24 @@ contract B is Script {
   // treated as static calls rather then generating a transaction
   function staticStuff(OnBlockchain a) static {
     exportNumber("four", a.giveMeFOUR());
-    execOn(a, "event", "asd");
   }
 }
+```
+
+This is producing the following output:
+```
+NEW   new OnBlockchain(0x313233)
+TXR   OnBlockchain(0xac5fce7ae0051acf4dcd81a64523da41e59cc7a5).giveMeSEVENTEEN(2)
+ACC   switch origin to 0x6deec6383397044107be3a74a6d50d41901f0356
+NEW   new OnBlockchain(0x313233)
+
+
+exportObject(name a, addr 0xac5fce7ae0051acf4dcd81a64523da41e59cc7a5, class OnBlockchain)
+exportNumber(name thirtytwo, number 32)
+exportNumber(name seventeen_nonstatic, number 1.13526946735478465913037617028159547472529646787646290075579373593588249133056e+77)
+exportNumber(name seventeen, number 17)
+exportNumber(name four, number 4)
+exportNumber(name btc_usd, number 678)
 ```
 
 ##Sidechain
