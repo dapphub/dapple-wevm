@@ -1,5 +1,5 @@
 var VM = require('../index.js')
-var LogTranslator = require('./logtranslator.js');
+var LogTranslator = require('dapple-utils/logtranslator.js');
 var _ = require('lodash');
 var utils = require('web3/lib/utils/utils.js');
 var sha3 = require('web3/lib/utils/sha3.js');
@@ -14,7 +14,6 @@ var vm = new VM()
 
 // Generating sourceclass map: (sha3(bin) => name)
 // This is needed to infer class names of deployed contracts
-var sourceclassMap = {};
 var sourceclassMap2 = {};
 
 // mapss class => function signature => constant bool
@@ -24,7 +23,6 @@ var classfunctionconstantsMap = {};
 var class_x_function_to_object = {};
 
 _.each(classes, (json, name) => {
-  sourceclassMap[sha3(json.bin)] = name;
   sourceclassMap2[json.bin] = name;
   classfunctionconstantsMap[name] = {};
   class_x_function_to_object[name] = {};
@@ -42,12 +40,9 @@ _.each(classes, (json, name) => {
   if(!!constructor) class_x_function_to_object[name]['constructor'] = constructor;
 });
 
-
-// TODO - export log-translator into own dapple-utils module
 var logtranslator = new LogTranslator(JSON.parse(classes.B.abi));
 
 // TODO - deprecated? maybe not. Make a huge contract class knowledge base
-var constantsMap = {};
 // abiA.filter(json => json.type !== 'constructor').forEach(json => {
 //   var name = utils.transformToFullName(json);
 //   constantsMap[sha3(name).slice(0,8)] = json.constant;
@@ -60,14 +55,28 @@ var addressclassMap = {};
 
 web3.eth.defaultAccount = web3.eth.coinbase;
 
-// TODO - make one dapplescript related communication object
+
+var logStep = (runState, log) => {
+  switch (log.event) {
+    case 'setCalls':
+      // TODO - beware of throws!!
+      runState.ds.callFlag = log.args.flag;
+      break;
+    case 'setOrigin':
+      // TODO - check if user owns account
+      runState.ds.origin = log.args.origin;
+      console.log(`ACC   switch origin to ${log.args.origin}`);
+      break;
+    default:
+      return false;
+  }
+  return true;
+}
+
 vm.runCode({
   code: new Buffer(classes.B.bin, 'hex'),
   gasLimit: new Buffer('ffffffff', 'hex'),
   caller: new Buffer(web3.eth.defaultAccount.slice(2), 'hex'),
-  constantsMap: constantsMap,
-  sourceclassMap: sourceclassMap,
-  addressclassMap: addressclassMap,
   ds: {
     origin: web3.eth.coinbase,
     classfunctionconstantsMap,
@@ -76,7 +85,9 @@ vm.runCode({
     class_x_function_to_object,
     coder,
     sourceclassMap2,
-    web3: web3
+    addressclassMap: addressclassMap,
+    web3: web3,
+    logStep
   }
 }, function (err, receipt) {
 
