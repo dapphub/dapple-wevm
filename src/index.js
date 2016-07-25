@@ -33,7 +33,6 @@ _.each(classes, (json, name) => {
     classfunctionconstantsMap[name][sha3(fname).slice(0,8)] = abi.constant;
     class_x_function_to_object[name][sha3(fname).slice(0,8)] = abi;
   });
-  // class_x_function_to_object[name]['constructor'] =
   var constructor =
     JSON.parse(json.abi)
     .find(abi => abi.type === 'constructor');
