@@ -1,5 +1,5 @@
 {
-  "name": "ethereumjs-vm",
+  "name": "dapple-wevm",
   "version": "1.4.1",
   "description": "an wallet side ethereum VM implementation",
   "main": "index.js",
