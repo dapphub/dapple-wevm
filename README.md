@@ -1,6 +1,6 @@
 # SYNOPSIS
 This is a direct fork of [ethereumjs-vm](https://github.com/ethereumjs/ethereumjs-vm) with a few
-(segnificent) modifications.
+(significant) modifications.
 
 This repository is a Proof-of-Concept for a wallet side EVM execution(**WEVM**),
 which brings several use cases which I want to explore in this POC project.
