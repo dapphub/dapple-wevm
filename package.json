@@ -1,6 +1,6 @@
 {
   "name": "dapple-wevm",
-  "version": "1.4.9",
+  "version": "1.4.10",
   "description": "an wallet side ethereum VM implementation",
   "main": "index.js",
   "dependencies": {
